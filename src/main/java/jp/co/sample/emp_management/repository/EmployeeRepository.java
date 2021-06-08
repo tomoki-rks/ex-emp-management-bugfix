@@ -99,4 +99,14 @@ public class EmployeeRepository {
 		String updateSql = "UPDATE employees SET dependents_count=:dependentsCount WHERE id=:id";
 		template.update(updateSql, param);
 	}
+
+	public void insert(Employee employee) {
+		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
+		int test = template.queryForObject("SELECT MAX(id) FROM employees", param, Integer.class);
+		employee.setId(test + 1);
+
+		String insertSql = "INSERT INTO employees VALUES (:id, :name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount);";
+
+		template.update(insertSql, param);
+	}
 }
