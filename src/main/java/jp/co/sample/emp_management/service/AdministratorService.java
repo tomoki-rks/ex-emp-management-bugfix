@@ -1,6 +1,7 @@
 package jp.co.sample.emp_management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +41,11 @@ public class AdministratorService {
 	 * @return 管理者情報　存在しない場合はnullが返ります
 	 */
 	public Administrator login(String mailAddress, String password) {
-		Administrator administrator = administratorRepository.findByMailAddressAndPassward(mailAddress, password);
-		return administrator;
+		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
+		if (administrator != null && passwordEncoder.matches(password, administrator.getPassword())) {
+			return administrator;
+		} else {
+			return null;
+		}
 	}
 }
