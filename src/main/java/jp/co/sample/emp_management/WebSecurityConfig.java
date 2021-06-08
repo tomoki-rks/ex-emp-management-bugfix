@@ -17,8 +17,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
-        // 暫定的に、すべてのユーザにすべてのページのアクセス許可
-        http.authorizeRequests().anyRequest().permitAll();
+        http.formLogin().loginPage("/").loginProcessingUrl("/login").usernameParameter("mailAddress")
+                .passwordParameter("password").defaultSuccessUrl("/employee/showList", true).permitAll();
+
+        http.authorizeRequests().antMatchers("/css/**", "/img/**", "/js/**").permitAll();
+        http.authorizeRequests().antMatchers("/toInsert", "/insert").permitAll();
+
+        // 従業員ページを見られるやつ（DEBUG用）
+        // http.authorizeRequests().antMatchers("/employee/**").permitAll();
+        // http.authorizeRequests().antMatchers("/employee/**").hasRole("ADMIN").anyRequest().authenticated();
+
+        http.authorizeRequests().anyRequest().authenticated();
     }
 
     @Bean
