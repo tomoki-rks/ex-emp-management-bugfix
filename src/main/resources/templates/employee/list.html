@@ -62,6 +62,13 @@
 
 <!-- ここから上を編集する必要はありません -->
 
+		<div class="form-group pull-right">
+			<form th:action="@{/employee/search}" action="#" method="GET" class="form-inline">
+				<label for="searchEmployee">従業員検索: </label>
+				<input type="text" class="form-control" id="searchEmployee" name="name">
+			</form>
+		</div>
+
 <!-- ここにモックのtable要素を貼り付けます -->
 
 				<table class="table table-striped">
