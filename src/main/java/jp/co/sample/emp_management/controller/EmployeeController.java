@@ -123,7 +123,7 @@ public class EmployeeController {
 	}
 
 	@RequestMapping("/add")
-	public String add(@Validated InsertEmployeeForm form, BindingResult result, Model model) {
+	public synchronized String add(@Validated InsertEmployeeForm form, BindingResult result, Model model) {
 		Employee employee = new Employee();
 		File file = new File("C:\\env\\vscode-workspace\\ex-emp-management-bugfix\\src\\main\\resources\\static\\img\\"
 				+ form.getImage().getOriginalFilename());
