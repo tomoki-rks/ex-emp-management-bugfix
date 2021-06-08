@@ -53,6 +53,12 @@ public class EmployeeService {
 		employeeRepository.update(employee);
 	}
 
+	/**
+	 * 従業員情報を検索します.
+	 * 
+	 * @param name 名前
+	 * @return 検索された従業員情報リスト
+	 */
 	public List<Employee> search(String name) {
 		if (name.isEmpty()) {
 			return showList();

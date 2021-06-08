@@ -74,6 +74,12 @@ public class EmployeeRepository {
 		return development;
 	}
 
+	/**
+	 * 名前からあいまい検索します.
+	 * 
+	 * @param name 検索したい名前
+	 * @return 検索された従業員情報リスト
+	 */
 	public List<Employee> findByName(String name) {
 		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name";
 
