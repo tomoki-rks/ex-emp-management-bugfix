@@ -66,4 +66,8 @@ public class EmployeeService {
 		List<Employee> employeesList = employeeRepository.findByName(name);
 		return employeesList;
 	}
+
+	public void insert(Employee employee) {
+		employeeRepository.insert(employee);
+	}
 }
