@@ -120,23 +120,52 @@
                   <tr>
                     <th nowrap>従業員名</th>
                     <td>
-                      <input type="text" name="name" class="form-control" />
+                      <label
+                        th:if="${#fields.hasErrors('name')}"
+                        th:errors="*{name}"
+                        class="error-messages"
+                      ></label>
+                      <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        th:field="*{name}"
+                        th:errorclass="error-input"
+                      />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>写真</th>
                     <td>
-                      <input type="file" name="image" id="image" accept="image/*">
+                      <label
+                        th:if="${#fields.hasErrors('image')}"
+                        th:errors="*{image}"
+                        class="error-messages"
+                      ></label>
+                      <input
+                        type="file"
+                        name="image"
+                        id="image"
+                        accept="image/*"
+                        th:field="*{image}"
+                        th:errorclass="error-input"
+                      />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>性別</th>
                     <td class="form-group">
+                      <label
+                        th:if="${#fields.hasErrors('gender')}"
+                        th:errors="*{gender}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="radio"
                         name="gender"
                         id="male"
                         value="男性"
+                        th:checked="*{gender} == '男性'"
                       />
                       <label for="male">男</label>
                       <input
@@ -144,6 +173,7 @@
                         name="gender"
                         id="female"
                         value="女性"
+                        th:checked="*{gender} == '女性'"
                       />
                       <label for="female">女</label>
                     </td>
@@ -151,77 +181,137 @@
                   <tr>
                     <th nowrap>入社日</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('hireDate')}"
+                        th:errors="*{hireDate}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="date"
                         name="hireDate"
                         id="hireDate"
                         class="form-control"
+                        th:field="*{hireDate}"
+                        th:errorclass="error-input"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>メールアドレス</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('mailAddress')}"
+                        th:errors="*{mailAddress}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="email"
                         name="mailAddress"
                         id="mailAddress"
                         class="form-control"
+                        th:field="*{mailAddress}"
+                        th:errorclass="error-input"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>郵便番号</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('zipCode')}"
+                        th:errors="*{zipCode}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="number"
                         class="form-control"
                         name="zipCode"
+                        id="zipCode"
+                        th:field="*{zipCode}"
+                        th:errorclass="error-input"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>住所</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('address')}"
+                        th:errors="*{address}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="text"
                         name="address"
                         id="address"
                         class="form-control"
+                        th:field="*{address}"
+                        th:errorclass="error-input"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>電話番号</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('telephone')}"
+                        th:errors="*{telephone}"
+                        class="error-messages"
+                      ></label>
                       <input
                         type="tel"
                         name="telephone"
                         id="telephone"
                         class="form-control"
+                        th:field="*{telephone}"
+                        th:errorclass="error-input"
                       />
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>給料</th>
-                    <td><input type="number" name="salary" id="salary" />円</td>
+                    <td>
+                      <label
+                        th:if="${#fields.hasErrors('salary')}"
+                        th:errors="*{salary}"
+                        class="error-messages"
+                      ></label>
+                      <input
+                        type="number"
+                        name="salary"
+                        id="salary"
+                        th:field="*{salary}"
+                        th:errorclass="error-input"
+                      />円
+                    </td>
                   </tr>
                   <tr>
                     <th nowrap>特性</th>
                     <td>
+                      <label
+                        th:if="${#fields.hasErrors('characteristics')}"
+                        th:errors="*{characteristics}"
+                        class="error-messages"
+                      ></label>
                       <textarea
                         name="characteristics"
                         id="characteristics"
                         cols="30"
                         rows="10"
                         class="form-control"
+                        th:field="*{characteristics}"
+                        th:errorclass="error-input"
                       ></textarea>
                     </td>
                   </tr>
                   <tr>
                     <th nowrap>扶養人数</th>
                     <td>
-                      <label class="error-messages">
+                      <label
+                        th:if="${#fields.hasErrors('dependentsCount')}"
+                        th:errors="*{dependentsCount}"
+                        class="error-messages"
+                      >
                         扶養人数を入力してください
                       </label>
                       <label
@@ -237,6 +327,7 @@
                         class="form-control"
                         value="3"
                         th:errorclass="error-input"
+                        th:field="*{dependentsCount}"
                       />
                     </td>
                   </tr>
