@@ -1,5 +1,10 @@
 package jp.co.sample.emp_management.form;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -10,26 +15,38 @@ import org.springframework.web.multipart.MultipartFile;
 public class InsertEmployeeForm {
 
     /** 従業員名 */
+    @NotBlank(message = "名前を入力してください")
     private String name;
     /** 画像 */
     private MultipartFile image;
     /** 性別 */
+    @NotBlank(message = "性別を選択してください")
     private String gender;
     /** 入社日 */
+    @NotBlank(message = "入社日を入力してください")
     private String hireDate;
     /** メールアドレス */
+    @Email(message = "メールアドレスの形式が不正です")
+    @NotBlank(message = "メールアドレスを入力してください")
     private String mailAddress;
     /** 郵便番号 */
+    @Pattern(regexp = "^([0-9]{3}[-]?[0-9]{4})?$", message = "郵便番号の形式が不正です")
+    @NotBlank(message = "郵便番号を入力してください")
     private String zipCode;
     /** 住所 */
+    @NotBlank(message = "住所を入力してください")
     private String address;
     /** 電話番号 */
+    @NotBlank(message = "電話番号を入力してください")
     private String telephone;
     /** 給料 */
+    @NotNull(message = "給料を入力してください")
     private Integer salary;
     /** 特性 */
+    @NotBlank(message = "特性を入力してください")
     private String characteristics;
     /** 扶養人数 */
+    @NotNull(message = "扶養人数を入力してください")
     private Integer dependentsCount;
 
     public String getName() {
