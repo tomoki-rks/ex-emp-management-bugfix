@@ -1,7 +1,8 @@
 package jp.co.sample.emp_management.controller;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.List;
 
@@ -146,10 +147,9 @@ public class EmployeeController {
 			return "employee/add";
 		}
 		Employee employee = new Employee();
-		File file = new File("C:\\env\\vscode-workspace\\ex-emp-management-bugfix\\src\\main\\resources\\static\\img\\"
-				+ form.getImage().getOriginalFilename());
+		Path path = Paths.get("src/main/resources/static/img/", form.getImage().getOriginalFilename());
 		try {
-			form.getImage().transferTo(file);
+			form.getImage().transferTo(path);
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
