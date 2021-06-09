@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -124,6 +125,13 @@ public class EmployeeController {
 
 	@RequestMapping("/add")
 	public synchronized String add(@Validated InsertEmployeeForm form, BindingResult result, Model model) {
+		if (form.getImage().getOriginalFilename().isEmpty()) {
+			FieldError error = new FieldError("no image", "image", "画像を選択してください");
+			result.addError(error);
+		}
+		if (result.hasErrors()) {
+			return "employee/add";
+		}
 		Employee employee = new Employee();
 		File file = new File("C:\\env\\vscode-workspace\\ex-emp-management-bugfix\\src\\main\\resources\\static\\img\\"
 				+ form.getImage().getOriginalFilename());
