@@ -1,6 +1,15 @@
 package jp.co.sample.emp_management.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +25,7 @@ import jp.co.sample.emp_management.repository.AdministratorRepository;
  */
 @Service
 @Transactional
-public class AdministratorService {
+public class AdministratorService implements UserDetailsService {
 	
 	@Autowired
 	private AdministratorRepository administratorRepository;
@@ -40,12 +49,15 @@ public class AdministratorService {
 	 * @param password パスワード
 	 * @return 管理者情報　存在しない場合はnullが返ります
 	 */
-	public Administrator login(String mailAddress, String password) {
+	public UserDetails loadUserByUsername(String mailAddress) {
 		Administrator administrator = administratorRepository.findByMailAddress(mailAddress);
-		if (administrator != null && passwordEncoder.matches(password, administrator.getPassword())) {
-			return administrator;
+		if (administrator != null) {
+			Collection<GrantedAuthority> authorities = new ArrayList<>();
+			authorities.add(new SimpleGrantedAuthority("ADMIN"));
+			User user = new User(administrator.getName(), administrator.getPassword(), authorities);
+			return user;
 		} else {
-			return null;
+			throw new UsernameNotFoundException("そのEmailは登録されていません。");
 		}
 	}
 }
