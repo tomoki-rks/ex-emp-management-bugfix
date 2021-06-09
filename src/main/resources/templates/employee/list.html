@@ -65,7 +65,10 @@
 		<div class="form-group pull-right">
 			<form th:action="@{/employee/search}" action="#" method="GET" class="form-inline">
 				<label for="searchEmployee">従業員検索: </label>
-				<input type="text" class="form-control" id="searchEmployee" name="name">
+				<input type="text" class="form-control" id="searchEmployee" name="name" autocomplete="name" list="employeeList">
+				<datalist id="employeeList">
+					<option th:each="employee:${employeeList}" th:value="${employee.name}"></option>
+				</datalist>
 			</form>
 		</div>
 
