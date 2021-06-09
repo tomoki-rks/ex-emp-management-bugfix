@@ -102,8 +102,8 @@ public class EmployeeRepository {
 
 	public void insert(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
-		int test = template.queryForObject("SELECT MAX(id) FROM employees", param, Integer.class);
-		employee.setId(test + 1);
+		int id = template.queryForObject("SELECT MAX(id) FROM employees", param, Integer.class);
+		employee.setId(id + 1);
 
 		String insertSql = "INSERT INTO employees VALUES (:id, :name, :image, :gender, :hireDate, :mailAddress, :zipCode, :address, :telephone, :salary, :characteristics, :dependentsCount);";
 
