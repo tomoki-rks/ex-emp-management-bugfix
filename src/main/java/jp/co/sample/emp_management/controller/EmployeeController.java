@@ -82,6 +82,11 @@ public class EmployeeController {
 		return "employee/detail";
 	}
 
+	/**
+	 * 従業員登録画面を出力します.
+	 * 
+	 * @return 従業員登録画面
+	 */
 	@RequestMapping("/showAdd")
 	public String showAddEmployee() {
 		return "employee/add";
@@ -123,6 +128,14 @@ public class EmployeeController {
 		return "employee/list";
 	}
 
+	/**
+	 * 従業員を登録します.
+	 * 
+	 * @param form   フォーム
+	 * @param result エラーバインディング
+	 * @param model  モデル
+	 * @return 従業員一覧画面
+	 */
 	@RequestMapping("/add")
 	public synchronized String add(@Validated InsertEmployeeForm form, BindingResult result, Model model) {
 		if (form.getImage().getOriginalFilename().isEmpty()) {

@@ -100,6 +100,11 @@ public class EmployeeRepository {
 		template.update(updateSql, param);
 	}
 
+	/**
+	 * 従業員を登録します.
+	 * 
+	 * @param employee 登録する従業員情報
+	 */
 	public void insert(Employee employee) {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(employee);
 		int id = template.queryForObject("SELECT MAX(id) FROM employees", param, Integer.class);
