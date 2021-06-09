@@ -60,7 +60,7 @@ public class EmployeeService {
 	 * @return 検索された従業員情報リスト
 	 */
 	public List<Employee> search(String name) {
-		if (name.isEmpty()) {
+		if (name == null || name.isEmpty()) {
 			return showList();
 		}
 		List<Employee> employeesList = employeeRepository.findByName(name);

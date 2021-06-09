@@ -47,8 +47,8 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
+	public String showList(Model model, String name) {
+		List<Employee> employeeList = employeeService.search(name);
 		model.addAttribute("employeeList", employeeList);
 		return "employee/list";
 	}
@@ -91,19 +91,5 @@ public class EmployeeController {
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
-	}
-
-	/**
-	 * 従業員をあいまい検索します.
-	 * 
-	 * @param model モデル
-	 * @param name  リクエストパラメータで送られてくる検索ワード
-	 * @return 従業員一覧画面
-	 */
-	@RequestMapping("/search")
-	public String search(Model model, String name) {
-		List<Employee> employeeList = employeeService.search(name);
-		model.addAttribute("employeeList", employeeList);
-		return "employee/list";
 	}
 }
