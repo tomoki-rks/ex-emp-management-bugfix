@@ -66,4 +66,13 @@ public class EmployeeService {
 		Page<Employee> employeesList = employeeRepository.findByName(name, pageable);
 		return employeesList;
 	}
+
+	/**
+	 * 従業員情報を登録します.
+	 * 
+	 * @param employee 登録する従業員情報
+	 */
+	public void insert(Employee employee) {
+		employeeRepository.insert(employee);
+	}
 }
