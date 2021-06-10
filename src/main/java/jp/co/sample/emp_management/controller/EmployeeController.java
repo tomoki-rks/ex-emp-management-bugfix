@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,7 +34,7 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
-	
+
 	/**
 	 * 使用するフォームオブジェクトをリクエストスコープに格納する.
 	 * 
@@ -59,20 +60,21 @@ public class EmployeeController {
 	 * @return 従業員一覧画面
 	 */
 	@RequestMapping("/showList")
-	public String showList(Model model) {
-		List<Employee> employeeList = employeeService.showList();
-		model.addAttribute("employeeList", employeeList);
+	public String showList(Model model, String name, Pageable pageable) {
+		Page<Employee> employeeList = employeeService.search(name, pageable);
+		model.addAttribute("page", employeeList);
+		model.addAttribute("employeeList", employeeList.getContent());
+		model.addAttribute("url", "/employee/showList");
 		return "employee/list";
 	}
 
-	
 	/////////////////////////////////////////////////////
 	// ユースケース：従業員詳細を表示する
 	/////////////////////////////////////////////////////
 	/**
 	 * 従業員詳細画面を出力します.
 	 * 
-	 * @param id リクエストパラメータで送られてくる従業員ID
+	 * @param id    リクエストパラメータで送られてくる従業員ID
 	 * @param model モデル
 	 * @return 従業員詳細画面
 	 */
@@ -99,13 +101,12 @@ public class EmployeeController {
 	/**
 	 * 従業員詳細(ここでは扶養人数のみ)を更新します.
 	 * 
-	 * @param form
-	 *            従業員情報用フォーム
+	 * @param form 従業員情報用フォーム
 	 * @return 従業員一覧画面へリダクレクト
 	 */
 	@RequestMapping("/update")
 	public String update(@Validated UpdateEmployeeForm form, BindingResult result, Model model) {
-		if(result.hasErrors()) {
+		if (result.hasErrors()) {
 			return showDetail(form.getId(), model);
 		}
 		Employee employee = new Employee();
@@ -113,20 +114,6 @@ public class EmployeeController {
 		employee.setDependentsCount(form.getIntDependentsCount());
 		employeeService.update(employee);
 		return "redirect:/employee/showList";
-	}
-
-	/**
-	 * 従業員をあいまい検索します.
-	 * 
-	 * @param model モデル
-	 * @param name  リクエストパラメータで送られてくる検索ワード
-	 * @return 従業員一覧画面
-	 */
-	@RequestMapping("/search")
-	public String search(Model model, String name) {
-		List<Employee> employeeList = employeeService.search(name);
-		model.addAttribute("employeeList", employeeList);
-		return "employee/list";
 	}
 
 	/**
