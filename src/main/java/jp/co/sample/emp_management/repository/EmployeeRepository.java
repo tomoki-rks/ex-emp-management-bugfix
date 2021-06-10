@@ -3,6 +3,9 @@ package jp.co.sample.emp_management.repository;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -49,12 +52,16 @@ public class EmployeeRepository {
 	 * 
 	 * @return 全従業員一覧 従業員が存在しない場合はサイズ0件の従業員一覧を返します
 	 */
-	public List<Employee> findAll() {
-		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees ORDER BY hire_date DESC";
+	public Page<Employee> findAll(Pageable pageable) {
+		String countSql = "SELECT count(id) FROM employees";
+		int count = template.queryForObject(countSql, new MapSqlParameterSource(), Integer.class);
 
-		List<Employee> developmentList = template.query(sql, EMPLOYEE_ROW_MAPPER);
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees ORDER BY hire_date DESC LIMIT :limit OFFSET :offset";
+		SqlParameterSource param = new MapSqlParameterSource().addValue("limit", pageable.getPageSize())
+				.addValue("offset", pageable.getOffset());
+		List<Employee> developmentList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
 
-		return developmentList;
+		return new PageImpl<>(developmentList, pageable, count);
 	}
 
 	/**
@@ -80,14 +87,20 @@ public class EmployeeRepository {
 	 * @param name 検索したい名前
 	 * @return 検索された従業員情報リスト
 	 */
-	public List<Employee> findByName(String name) {
-		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name";
+	public Page<Employee> findByName(String name, Pageable pageable) {
+		String countSql = "SELECT count(id) FROM employees WHERE name LIKE :name";
+		int count = template.queryForObject(countSql, new MapSqlParameterSource().addValue("name", "%" + name + "%"),
+				Integer.class);
 
-		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%");
+		String sql = "SELECT id,name,image,gender,hire_date,mail_address,zip_code,address,telephone,salary,characteristics,dependents_count FROM employees WHERE name LIKE :name LIMIT :limit OFFSET :offset";
+
+		SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%" + name + "%")
+				.addValue("limit", pageable.getPageSize()).addValue("offset", pageable.getOffset());
 
 		List<Employee> employeeList = template.query(sql, param, EMPLOYEE_ROW_MAPPER);
 
-		return employeeList;
+		return new PageImpl<>(employeeList, pageable, count);
+
 	}
 
 	/**
