@@ -5,7 +5,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -107,25 +106,6 @@ public class AdministratorController {
 	public String toLogin() {
 		return "administrator/login";
 	}
-
-	/**
-	 * ログインします.
-	 * 
-	 * @param form   管理者情報用フォーム
-	 * @param result エラー情報格納用オブッジェクト
-	 * @return ログイン後の従業員一覧画面
-	 */
-	@RequestMapping("/login")
-	public String login(LoginForm form, BindingResult result, Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-		if (administrator == null) {
-			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
-			return toLogin();
-		}
-		session.setAttribute("administratorName", administrator.getName());
-		return "forward:/employee/showList";
-	}
-
 	/////////////////////////////////////////////////////
 	// ユースケース：ログアウトをする
 	/////////////////////////////////////////////////////
