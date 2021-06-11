@@ -38,6 +38,7 @@
 					id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="list.html" th:href="@{/employee/showList}">従業員管理</a></li>
+						<li><a href="list.html" th:href="@{/employee/showAdd}">従業員登録</a></li>
 					</ul>
 					<p class="navbar-text navbar-right">
 						<span th:text="${session.administratorName}">山田太郎</span>さんこんにちは！
@@ -65,7 +66,10 @@
 		<div class="form-group pull-right">
 			<form th:action="@{/employee/showList}" action="#" method="GET" class="form-inline">
 				<label for="searchEmployee">従業員検索: </label>
-				<input type="text" class="form-control" id="searchEmployee" name="name">
+				<input type="text" class="form-control" id="searchEmployee" name="name" autocomplete="name" list="employeeList">
+				<datalist id="employeeList">
+					<option th:each="employee:${employeeList}" th:value="${employee.name}"></option>
+				</datalist>
 			</form>
 		</div>
 
@@ -95,7 +99,24 @@
 						</tr>
 					</tbody>
 				</table>
-
+				<div th:fragment='paginationbar'>
+					<ul>
+						<li th:class="${page.first} ? 'disabled':''" style="display:inline">
+							<span th:if="${page.first}">←先頭</span>
+							<a th:if="${not page.first}" th:href="@{${url}(page=0)}">←先頭</a>
+						</li>
+						<li th:each='i : ${#numbers.sequence(0, page.totalPages-1)}' th:class="(${i}==${page.number})? 'active' : ''" style="display:inline">
+							<span th:if='${i}==${page.number}' th:text='${i+1}'>1</span>
+							<a th:if='${i}!=${page.number}' th:href="@{${url}(page=${i})}">
+								<span th:text='${i+1}'>1</span>
+							</a>
+						</li>
+						<li th:class="${page.last} ? 'disabled':''" style="display:inline">
+							<span th:if="${page.last}">末尾➝</span>
+							<a th:if="${not page.last}" th:href="@{${url}(page=(${page.totalPages}-1))}">末尾➝</a>
+						</li>
+					</ul>
+				</div>
 
 <!-- ここから下を編集する必要はありません -->
 

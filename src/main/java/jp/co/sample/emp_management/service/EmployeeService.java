@@ -1,8 +1,8 @@
 package jp.co.sample.emp_management.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,17 +21,17 @@ public class EmployeeService {
 
 	@Autowired
 	private EmployeeRepository employeeRepository;
-	
+
 	/**
 	 * 従業員情報を全件取得します.
 	 * 
-	 * @return　従業員情報一覧
+	 * @return 従業員情報一覧
 	 */
-	public List<Employee> showList() {
-		List<Employee> employeeList = employeeRepository.findAll();
+	public Page<Employee> showList(Pageable pageable) {
+		Page<Employee> employeeList = employeeRepository.findAll(pageable);
 		return employeeList;
 	}
-	
+
 	/**
 	 * 従業員情報を取得します.
 	 * 
@@ -43,7 +43,7 @@ public class EmployeeService {
 		Employee employee = employeeRepository.load(id);
 		return employee;
 	}
-	
+
 	/**
 	 * 従業員情報を更新します.
 	 * 
@@ -59,11 +59,20 @@ public class EmployeeService {
 	 * @param name 名前
 	 * @return 検索された従業員情報リスト
 	 */
-	public List<Employee> search(String name) {
+	public Page<Employee> search(String name, Pageable pageable) {
 		if (name == null || name.isEmpty()) {
-			return showList();
+			return showList(pageable);
 		}
-		List<Employee> employeesList = employeeRepository.findByName(name);
+		Page<Employee> employeesList = employeeRepository.findByName(name, pageable);
 		return employeesList;
+	}
+
+	/**
+	 * 従業員情報を登録します.
+	 * 
+	 * @param employee 登録する従業員情報
+	 */
+	public void insert(Employee employee) {
+		employeeRepository.insert(employee);
 	}
 }
